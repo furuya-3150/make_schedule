@@ -176,6 +176,7 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("./styles.css");
+var weeks = ["日", "月", "火", "水", "木", "金", "土"];
 var onClickAdd = function onClickAdd() {
   //　日時フィールドの値を取得
   var inputDate = document.getElementById("vacant-date").value;
@@ -205,7 +206,7 @@ var onClickAdd = function onClickAdd() {
   var putDate = date.toLocaleDateString();
 
   // 日にちから曜日を炙る
-  var weeks = ["日", "月", "火", "水", "木", "金", "土"];
+
   var week = weeks[date.getDay()];
   //フォマットの値を取得
   var selectFormatIndex = document.getElementById("select-format").selectedIndex;
@@ -236,6 +237,8 @@ var onClickAdd = function onClickAdd() {
     document.getElementById("schedule-content").value += text;
   }
 };
+
+// textarea内を削除する
 var onClickCopy = function onClickCopy() {
   var copyTarget = document.getElementById("schedule-content");
   copyTarget.select();
@@ -247,31 +250,28 @@ var onClickArrangement = function onClickArrangement() {
   var arrangementTarget = document.getElementById("schedule-content");
   if (arrangementTarget.value === "") return;
 
-  // フォーマットが整っていない可能性があるので整える
-  //onClickArrangement();
-
   // 選択されたフォーマットを取得
   var selectFormatIndex = document.getElementById("select-format").selectedIndex;
 
   //　改行ごとに配列に挿入
   var arrangement = arrangementTarget.value.split(/\n/);
+
+  // 配列内の空白は削除
   arrangement = arrangement.filter(function (val) {
     return val !== "";
   });
-
-  // console.log(arrangement);
-  // return;
-
   var year = "";
   var month = "";
   var day = "";
   var startTime = "";
+  var endTime = "";
   var nowDate = new Date();
   var thisYear = nowDate.getFullYear();
   var thisMonth = nowDate.getMonth() + 1;
   var arrangemented = [];
   arrangement.forEach(function (element) {
     startTime = element.substring(element.indexOf(")") + 2, element.indexOf("〜"));
+    endTime = element.substring(element.indexOf("〜") + 1, element.length);
     if (selectFormatIndex === 0) {
       month = element.substring(0, element.indexOf("月"));
       if (thisMonth === 12 && month === "1") {
@@ -280,28 +280,75 @@ var onClickArrangement = function onClickArrangement() {
         year = thisYear;
       }
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      arrangemented.push(new Date(year + "/" + month + "/" + day + " " + startTime + ":00"));
     } else if (selectFormatIndex === 1) {
       year = element.substring(0, element.indexOf("年"));
       month = element.substring(element.indexOf("年") + 1, element.indexOf("月"));
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      arrangemented.push(new Date());
-    } else if (selectFormatIndex === 2) {} else if (selectFormatIndex === 1) {}
-  });
-  // Date型に合うように変形し、比較をする
-  arrangement.sort(function (a, b) {
-    var dateA = new Date(a.substr(0, a.indexOf("(")) + a.substr(a.indexOf(")") + 2, 5) + ":00");
-    var dateB = new Date(b.substr(0, b.indexOf("(")) + b.substr(b.indexOf(")") + 2, 5) + ":00");
-    return dateA - dateB;
-  });
-  var count = 0;
-  arrangement.forEach(function (element) {
-    if (count === 0) {
-      document.getElementById("schedule-content").value = element + "\n";
-    } else {
-      document.getElementById("schedule-content").value += element + "\n";
+    } else if (selectFormatIndex === 2) {
+      month = element.substring(0, element.indexOf("/"));
+      if (thisMonth === 12 && month === "1") {
+        year = thisYear + 1;
+      } else {
+        year = thisYear;
+      }
+      day = element.substring(element.indexOf("/") + 1, element.indexOf("(") - 1);
+    } else if (selectFormatIndex === 3) {
+      year = element.substring(0, element.indexOf("/"));
+      month = element.substring(element.indexOf("/") + 1, element.lastIndexOf("/"));
+      day = element.substring(element.lastIndexOf("/") + 1, element.indexOf("(") - 1);
     }
-    count += 1;
+    arrangemented.push([new Date(year + "/" + month + "/" + day + " " + startTime + ":00"), endTime]);
+  });
+
+  // Date型に合うように変形し、比較をする
+  arrangemented.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+  var year = "";
+  var month = "";
+  var day = "";
+  var dayOfWeek = "";
+  var text = "";
+  var hour = "";
+  var min = "";
+  console.log(arrangemented);
+  arrangemented.forEach(function (element, index) {
+    year = element[0].getFullYear();
+    month = element[0].getMonth() + 1;
+    day = element[0].getDate();
+    dayOfWeek = weeks[element[0].getDay()];
+    hour = element[0].getHours();
+    min = element[0].getMinutes();
+    console.log(year, month, day, dayOfWeek, hour, min);
+    if (selectFormatIndex === 0) {
+      text = month + "月" + day + "日" + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 1) {
+      text = year + "年" + month + "月" + day + "日" + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 2) {
+      text = month + "/" + day + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 3) {
+      text = year + "/" + month + "/" + day + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    }
   });
   //console.log(arrangement);
 };

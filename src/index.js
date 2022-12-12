@@ -1,5 +1,7 @@
 import "./styles.css";
 
+var weeks = ["日", "月", "火", "水", "木", "金", "土"];
+
 const onClickAdd = () => {
   //　日時フィールドの値を取得
   var inputDate = document.getElementById("vacant-date").value;
@@ -32,11 +34,11 @@ const onClickAdd = () => {
   const putDate = date.toLocaleDateString();
 
   // 日にちから曜日を炙る
-  var weeks = ["日", "月", "火", "水", "木", "金", "土"];
+
   const week = weeks[date.getDay()];
   //フォマットの値を取得
-  const selectFormatIndex = document.getElementById("select-format")
-    .selectedIndex;
+  const selectFormatIndex =
+    document.getElementById("select-format").selectedIndex;
   var text = "";
   const weekTimeTemp =
     " (" + week + ") " + inputStartTime + "〜" + inputEndTime + "\n";
@@ -70,6 +72,7 @@ const onClickAdd = () => {
   }
 };
 
+// textarea内を削除する
 const onClickCopy = () => {
   const copyTarget = document.getElementById("schedule-content");
   copyTarget.select();
@@ -81,26 +84,23 @@ const onClickArrangement = () => {
   const arrangementTarget = document.getElementById("schedule-content");
   if (arrangementTarget.value === "") return;
 
-  // フォーマットが整っていない可能性があるので整える
-  //onClickArrangement();
-
   // 選択されたフォーマットを取得
-  const selectFormatIndex = document.getElementById("select-format")
-    .selectedIndex;
+  const selectFormatIndex =
+    document.getElementById("select-format").selectedIndex;
 
   //　改行ごとに配列に挿入
   var arrangement = arrangementTarget.value.split(/\n/);
+
+  // 配列内の空白は削除
   arrangement = arrangement.filter(function (val) {
     return val !== "";
   });
-
-  // console.log(arrangement);
-  // return;
 
   var year = "";
   var month = "";
   var day = "";
   var startTime = "";
+  var endTime = "";
 
   const nowDate = new Date();
   var thisYear = nowDate.getFullYear();
@@ -113,6 +113,7 @@ const onClickArrangement = () => {
       element.indexOf(")") + 2,
       element.indexOf("〜")
     );
+    endTime = element.substring(element.indexOf("〜") + 1, element.length);
     if (selectFormatIndex === 0) {
       month = element.substring(0, element.indexOf("月"));
       if (thisMonth === 12 && month === "1") {
@@ -121,9 +122,6 @@ const onClickArrangement = () => {
         year = thisYear;
       }
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      arrangemented.push(
-        new Date(year + "/" + month + "/" + day + " " + startTime + ":00")
-      );
     } else if (selectFormatIndex === 1) {
       year = element.substring(0, element.indexOf("年"));
       month = element.substring(
@@ -131,34 +129,145 @@ const onClickArrangement = () => {
         element.indexOf("月")
       );
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      arrangemented.push(new Date());
     } else if (selectFormatIndex === 2) {
-    } else if (selectFormatIndex === 1) {
+      month = element.substring(0, element.indexOf("/"));
+      if (thisMonth === 12 && month === "1") {
+        year = thisYear + 1;
+      } else {
+        year = thisYear;
+      }
+      day = element.substring(
+        element.indexOf("/") + 1,
+        element.indexOf("(") - 1
+      );
+    } else if (selectFormatIndex === 3) {
+      year = element.substring(0, element.indexOf("/"));
+      month = element.substring(
+        element.indexOf("/") + 1,
+        element.lastIndexOf("/")
+      );
+      day = element.substring(
+        element.lastIndexOf("/") + 1,
+        element.indexOf("(") - 1
+      );
     }
+    arrangemented.push([
+      new Date(year + "/" + month + "/" + day + " " + startTime + ":00"),
+      endTime,
+    ]);
   });
+
   // Date型に合うように変形し、比較をする
-  arrangement.sort(function (a, b) {
-    const dateA = new Date(
-      a.substr(0, a.indexOf("(")) + a.substr(a.indexOf(")") + 2, 5) + ":00"
-    );
-    const dateB = new Date(
-      b.substr(0, b.indexOf("(")) + b.substr(b.indexOf(")") + 2, 5) + ":00"
-    );
-
-    return dateA - dateB;
+  arrangemented.sort(function (a, b) {
+    return a[0] - b[0];
   });
 
-  var count = 0;
-  arrangement.forEach(function (element) {
-    if (count === 0) {
-      document.getElementById("schedule-content").value = element + "\n";
-    } else {
-      document.getElementById("schedule-content").value += element + "\n";
+  var year = "";
+  var month = "";
+  var day = "";
+  var dayOfWeek = "";
+  var text = "";
+  var hour = "";
+  var min = "";
+
+  console.log(arrangemented);
+
+  arrangemented.forEach(function (element, index) {
+    year = element[0].getFullYear();
+    month = element[0].getMonth() + 1;
+    day = element[0].getDate();
+    dayOfWeek = weeks[element[0].getDay()];
+    hour = element[0].getHours();
+    min = element[0].getMinutes();
+
+    console.log(year, month, day, dayOfWeek, hour, min);
+
+    if (selectFormatIndex === 0) {
+      text =
+        month +
+        "月" +
+        day +
+        "日" +
+        " (" +
+        dayOfWeek +
+        ") " +
+        hour +
+        ":" +
+        min +
+        "〜" +
+        element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 1) {
+      text =
+        year +
+        "年" +
+        month +
+        "月" +
+        day +
+        "日" +
+        " (" +
+        dayOfWeek +
+        ") " +
+        hour +
+        ":" +
+        min +
+        "〜" +
+        element[1];
+
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 2) {
+      text =
+        month +
+        "/" +
+        day +
+        " (" +
+        dayOfWeek +
+        ") " +
+        hour +
+        ":" +
+        min +
+        "〜" +
+        element[1];
+
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
+    } else if (selectFormatIndex === 3) {
+      text =
+        year +
+        "/" +
+        month +
+        "/" +
+        day +
+        " (" +
+        dayOfWeek +
+        ") " +
+        hour +
+        ":" +
+        min +
+        "〜" +
+        element[1];
+      if (index === 0) {
+        arrangementTarget.value = text + "\n";
+      } else {
+        arrangementTarget.value += text + "\n";
+      }
     }
-    count += 1;
   });
   //console.log(arrangement);
 };
+
+
 
 //　フォーマットを選択した時の処理
 const onChangeSelectFormat = () => {
@@ -245,8 +354,8 @@ const onChangeSelectFormat = () => {
   console.log(newFormat);
 
   // どのフォーマットを選んだのかを
-  const selectFormatIndex = document.getElementById("select-format")
-    .selectedIndex;
+  const selectFormatIndex =
+    document.getElementById("select-format").selectedIndex;
 
   changeFormat.value = "";
   var weekAndTime = "";
