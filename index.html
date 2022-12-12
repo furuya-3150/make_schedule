@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>日程表示</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div class="date-time">
+      <input type="date" id="vacant-date" />
+      <input type="time" id="start-time" />
+      <input type="time" id="end-time" />
+      <button id="add-datetime">出力</button>
+    </div>
+
+    <div>
+      format:
+      <select id="select-format">
+        <option value="format1">1月1日 (日) 1:00〜23:00</option>
+        <option value="format2">2023年1月1日 (日) 1:00〜23:00</option>
+        <option value="format3">1/1 (日) 1:00〜23:00</option>
+        <option value="format4">2023/1/1 (日) 1:00〜23:00</option>
+      </select>
+    </div>
+
+    <div class="schedule-area">
+      <textarea id="schedule-content"></textarea>
+      <div class="schedule-button">
+        <button id="copy-button">コピー</button>
+        <button id="arrangement-button">整理</button>
+      </div>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
