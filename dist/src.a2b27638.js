@@ -226,11 +226,8 @@ var onClickAdd = function onClickAdd() {
   }
 
   // divタグの子要素に各種
-  //document.getElementById("schedule-content").value += "\n" + text;
 
   var textarea = document.getElementById("schedule-content").value;
-  //console.log(textarea);
-
   if (textarea === "") {
     document.getElementById("schedule-content").value = text;
   } else {
@@ -269,6 +266,8 @@ var onClickArrangement = function onClickArrangement() {
   var thisYear = nowDate.getFullYear();
   var thisMonth = nowDate.getMonth() + 1;
   var arrangemented = [];
+
+  // 配列に入った日程を昇順にするために配列の要素をDate型に変更する
   arrangement.forEach(function (element) {
     startTime = element.substring(element.indexOf(")") + 2, element.indexOf("〜"));
     endTime = element.substring(element.indexOf("〜") + 1, element.length);
@@ -300,7 +299,7 @@ var onClickArrangement = function onClickArrangement() {
     arrangemented.push([new Date(year + "/" + month + "/" + day + " " + startTime + ":00"), endTime]);
   });
 
-  // Date型に合うように変形し、比較をする
+  // Data型の配列をソートする
   arrangemented.sort(function (a, b) {
     return a[0] - b[0];
   });
@@ -311,7 +310,8 @@ var onClickArrangement = function onClickArrangement() {
   var text = "";
   var hour = "";
   var min = "";
-  console.log(arrangemented);
+
+  // Date型にした配列の要素を選択されたテンプレートに従い、出力
   arrangemented.forEach(function (element, index) {
     year = element[0].getFullYear();
     month = element[0].getMonth() + 1;
@@ -319,7 +319,6 @@ var onClickArrangement = function onClickArrangement() {
     dayOfWeek = weeks[element[0].getDay()];
     hour = element[0].getHours();
     min = element[0].getMinutes();
-    console.log(year, month, day, dayOfWeek, hour, min);
     if (selectFormatIndex === 0) {
       text = month + "月" + day + "日" + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
       if (index === 0) {
@@ -350,20 +349,20 @@ var onClickArrangement = function onClickArrangement() {
       }
     }
   });
-  //console.log(arrangement);
 };
 
 //　フォーマットを選択した時の処理
 var onChangeSelectFormat = function onChangeSelectFormat() {
   var changeFormat = document.getElementById("schedule-content");
   if (changeFormat.value === "") return;
+
+  //　textareaに入力されているものを配列に入れる
   var changeFormatTarget = changeFormat.value.split(/\n/);
 
   //配列に空白が含まれていれば、配列から削除する
   changeFormatTarget = changeFormatTarget.filter(function (val) {
     return val !== "";
   });
-  console.log(changeFormatTarget);
   var year = "";
   var month = "";
   var day = "";
@@ -374,6 +373,8 @@ var onChangeSelectFormat = function onChangeSelectFormat() {
   var thisYear = nowDate.getFullYear();
   var thisMonth = nowDate.getMonth() + 1;
   var newFormat = [];
+
+  // 配列の要素がどのフォーマットなのかわからないので、場合わけをして、指定の順序で日時などを新しい配列に挿入する
   changeFormatTarget.forEach(function (element) {
     dayOfWeek = element.substring(element.indexOf("(") + 1, element.indexOf(")"));
     startTime = element.substring(element.indexOf(")") + 2, element.indexOf("〜"));
@@ -382,21 +383,20 @@ var onChangeSelectFormat = function onChangeSelectFormat() {
       year = element.substring(0, element.indexOf("年"));
       month = element.substring(element.indexOf("年") + 1, element.indexOf("月"));
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      console.log("aaaaaaaa");
     } else if (!element.includes("/")) {
       month = element.substring(0, element.indexOf("月"));
+
+      //　今月が12月で日程として1月が入力された場合来年の1月として扱う
       if (thisMonth === 12 && month === "1") {
         year = thisYear + 1;
       } else {
         year = thisYear;
       }
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      console.log("bbbbbbbbbb");
     } else if (element.substring(0, element.indexOf("/")).length > 3) {
       year = element.substring(0, element.indexOf("/"));
       month = element.substring(element.indexOf("/") + 1, element.lastIndexOf("/"));
       day = element.substring(element.lastIndexOf("/") + 1, element.indexOf("(") - 1);
-      console.log("cccccccccc");
     } else if (element.substring(0, element.indexOf("/")).length < 3) {
       month = element.substring(0, element.indexOf("/"));
 
@@ -407,20 +407,19 @@ var onChangeSelectFormat = function onChangeSelectFormat() {
         year = thisYear;
       }
       day = element.substring(element.indexOf("/") + 1, element.indexOf("(") - 1);
-      console.log("dddddddddd");
     }
     newFormat.push([year, month, day, dayOfWeek, startTime, endTime]);
   });
-  console.log(newFormat);
 
   // どのフォーマットを選んだのかを
   var selectFormatIndex = document.getElementById("select-format").selectedIndex;
   changeFormat.value = "";
   var weekAndTime = "";
   var text = "";
+
+  // 新しい配列の要素を選択されたフォーマット別に出力していく
   newFormat.forEach(function (element) {
     weekAndTime = " (" + element[3] + ") " + element[4] + "〜" + element[5];
-    console.log(weekAndTime);
     if (selectFormatIndex === 0) {
       text = element[1] + "月" + element[2] + "日" + weekAndTime;
     } else if (selectFormatIndex === 1) {

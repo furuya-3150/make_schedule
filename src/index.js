@@ -60,10 +60,8 @@ const onClickAdd = () => {
   }
 
   // divタグの子要素に各種
-  //document.getElementById("schedule-content").value += "\n" + text;
 
   var textarea = document.getElementById("schedule-content").value;
-  //console.log(textarea);
 
   if (textarea === "") {
     document.getElementById("schedule-content").value = text;
@@ -108,6 +106,7 @@ const onClickArrangement = () => {
 
   var arrangemented = [];
 
+  // 配列に入った日程を昇順にするために配列の要素をDate型に変更する
   arrangement.forEach(function (element) {
     startTime = element.substring(
       element.indexOf(")") + 2,
@@ -156,8 +155,8 @@ const onClickArrangement = () => {
       endTime,
     ]);
   });
-
-  // Date型に合うように変形し、比較をする
+  
+  // Data型の配列をソートする
   arrangemented.sort(function (a, b) {
     return a[0] - b[0];
   });
@@ -170,8 +169,8 @@ const onClickArrangement = () => {
   var hour = "";
   var min = "";
 
-  console.log(arrangemented);
 
+  // Date型にした配列の要素を選択されたテンプレートに従い、出力
   arrangemented.forEach(function (element, index) {
     year = element[0].getFullYear();
     month = element[0].getMonth() + 1;
@@ -180,7 +179,6 @@ const onClickArrangement = () => {
     hour = element[0].getHours();
     min = element[0].getMinutes();
 
-    console.log(year, month, day, dayOfWeek, hour, min);
 
     if (selectFormatIndex === 0) {
       text =
@@ -264,7 +262,6 @@ const onClickArrangement = () => {
       }
     }
   });
-  //console.log(arrangement);
 };
 
 
@@ -274,14 +271,13 @@ const onChangeSelectFormat = () => {
   const changeFormat = document.getElementById("schedule-content");
   if (changeFormat.value === "") return;
 
+  //　textareaに入力されているものを配列に入れる
   var changeFormatTarget = changeFormat.value.split(/\n/);
 
   //配列に空白が含まれていれば、配列から削除する
   changeFormatTarget = changeFormatTarget.filter(function (val) {
     return val !== "";
   });
-
-  console.log(changeFormatTarget);
 
   var year = "";
   var month = "";
@@ -295,6 +291,8 @@ const onChangeSelectFormat = () => {
   var thisMonth = nowDate.getMonth() + 1;
 
   var newFormat = [];
+  
+  // 配列の要素がどのフォーマットなのかわからないので、場合わけをして、指定の順序で日時などを新しい配列に挿入する
   changeFormatTarget.forEach(function (element) {
     dayOfWeek = element.substring(
       element.indexOf("(") + 1,
@@ -312,16 +310,16 @@ const onChangeSelectFormat = () => {
         element.indexOf("月")
       );
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      console.log("aaaaaaaa");
     } else if (!element.includes("/")) {
       month = element.substring(0, element.indexOf("月"));
+      
+      //　今月が12月で日程として1月が入力された場合来年の1月として扱う
       if (thisMonth === 12 && month === "1") {
         year = thisYear + 1;
       } else {
         year = thisYear;
       }
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
-      console.log("bbbbbbbbbb");
     } else if (element.substring(0, element.indexOf("/")).length > 3) {
       year = element.substring(0, element.indexOf("/"));
       month = element.substring(
@@ -332,7 +330,6 @@ const onChangeSelectFormat = () => {
         element.lastIndexOf("/") + 1,
         element.indexOf("(") - 1
       );
-      console.log("cccccccccc");
     } else if (element.substring(0, element.indexOf("/")).length < 3) {
       month = element.substring(0, element.indexOf("/"));
 
@@ -346,12 +343,9 @@ const onChangeSelectFormat = () => {
         element.indexOf("/") + 1,
         element.indexOf("(") - 1
       );
-      console.log("dddddddddd");
     }
     newFormat.push([year, month, day, dayOfWeek, startTime, endTime]);
   });
-
-  console.log(newFormat);
 
   // どのフォーマットを選んだのかを
   const selectFormatIndex =
@@ -360,9 +354,10 @@ const onChangeSelectFormat = () => {
   changeFormat.value = "";
   var weekAndTime = "";
   var text = "";
+  
+  // 新しい配列の要素を選択されたフォーマット別に出力していく
   newFormat.forEach(function (element) {
     weekAndTime = " (" + element[3] + ") " + element[4] + "〜" + element[5];
-    console.log(weekAndTime);
 
     if (selectFormatIndex === 0) {
       text = element[1] + "月" + element[2] + "日" + weekAndTime;
