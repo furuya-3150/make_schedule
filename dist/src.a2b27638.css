@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+}
+
+.list-row {
+  display: flex;
+}
+
+textarea {
+  width: 250px;
+  height: 150px;
+}
+
+
+/*# sourceMappingURL=/src.a2b27638.css.map */
