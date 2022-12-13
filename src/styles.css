@@ -1,12 +1,91 @@
 body {
   font-family: sans-serif;
+  
 }
 
-.list-row {
+.schedule {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
 }
+
+
 
 textarea {
   width: 250px;
   height: 150px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.date-time {
+  /* position: relative;
+  display: inline-block; */
+  /* width: 200px;
+  height: 36px; */
+  color: #ccc;
+  
+}
+
+input {
+  /* position: relative; */
+  padding: 0 10px;
+  width: 100px;
+  height: 36px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  background: transparent;
+  box-sizing: border-box;
+  font-size: 14px;
+  /* color: #999; */
+}
+
+input[type="date"] {
+  width: 150px;
+}
+
+
+
+.button {
+  padding: 0 10px;
+  width: 100px;
+  height: 36px;
+  border-radius: 15px; /* 角丸       */
+  font-size: 12pt; /* 文字サイズ */
+  text-align: center; /* 文字位置   */
+  cursor: pointer; /* カーソル   */
+  background: #ccc; /* 背景色     */
+  color: #999999; /* 文字色     */
+  line-height: 1em; /* 1行の高さ  */
+  transition: 0.3s; /* なめらか変化 */
+  border: 2px solid #ffffff; /* 枠の指定 */
+}
+
+.button {
+  box-shadow: none; /* カーソル時の影消去 */
+  color: #ffffff; /* 背景色     */
+  background: #999999; /* 文字色     */
+}
+
+#select-format {
+  padding: 0 10px;
+  width: 200px;
+  height: 36px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  /* background: transparent; */
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* .schedule-content {
+  
+} */
+
+@media screen and (min-width: 481px) {
+  
 }
