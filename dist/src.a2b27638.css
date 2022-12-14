@@ -1,17 +1,10 @@
 body {
   font-family: sans-serif;
-  
 }
 
 .schedule {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 100%;
+  /* text-align: center; */
 }
-
-
 
 textarea {
   width: 250px;
@@ -23,12 +16,7 @@ textarea {
 }
 
 .date-time {
-  /* position: relative;
-  display: inline-block; */
-  /* width: 200px;
-  height: 36px; */
   color: #ccc;
-  
 }
 
 input {
@@ -48,27 +36,25 @@ input[type="date"] {
   width: 150px;
 }
 
-
-
 .button {
   padding: 0 10px;
   width: 100px;
   height: 36px;
-  border-radius: 15px; /* 角丸       */
-  font-size: 12pt; /* 文字サイズ */
-  text-align: center; /* 文字位置   */
-  cursor: pointer; /* カーソル   */
-  background: #ccc; /* 背景色     */
-  color: #999999; /* 文字色     */
-  line-height: 1em; /* 1行の高さ  */
-  transition: 0.3s; /* なめらか変化 */
-  border: 2px solid #ffffff; /* 枠の指定 */
+  border-radius: 15px;
+  font-size: 12pt;
+  text-align: center;
+  cursor: pointer;
+  background: #ccc;
+  color: #999999;
+  line-height: 1em;
+  transition: 0.3s;
+  border: 2px solid #ffffff;
 }
 
 .button {
-  box-shadow: none; /* カーソル時の影消去 */
-  color: #ffffff; /* 背景色     */
-  background: #999999; /* 文字色     */
+  box-shadow: none;
+  color: #ffffff;
+  background: #999999;
 }
 
 #select-format {
@@ -82,12 +68,13 @@ input[type="date"] {
   font-size: 14px;
 }
 
-/* .schedule-content {
-  
-} */
-
-@media screen and (min-width: 481px) {
-  
+@media screen and (min-width: 560px) {
+  .schedule {
+    max-width: 100%;
+  }
+  input {
+    width: 150px;
+  }
 }
 
 
