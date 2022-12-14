@@ -1,42 +1,22 @@
-body {
-  font-family: sans-serif;
-}
-
 .schedule {
-  /* text-align: center; */
-}
-
-textarea {
-  width: 250px;
-  height: 150px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-  background: transparent;
-  box-sizing: border-box;
-}
-
-.date-time {
-  color: #ccc;
+  margin-top: 100px;
+  text-align: center;
 }
 
 input {
-  /* position: relative; */
-  padding: 0 10px;
-  width: 100px;
-  height: 36px;
+  padding: 10px;
+  margin: 5px 0;
+  width: 70%;
+  height: 40px;
   border: 2px solid #ccc;
   border-radius: 15px;
   background: transparent;
   box-sizing: border-box;
   font-size: 14px;
-  /* color: #999; */
-}
-
-input[type="date"] {
-  width: 150px;
 }
 
 .button {
+  margin: 5px 0;
   padding: 0 10px;
   width: 100px;
   height: 36px;
@@ -45,22 +25,31 @@ input[type="date"] {
   text-align: center;
   cursor: pointer;
   background: #ccc;
-  color: #999999;
   line-height: 1em;
   transition: 0.3s;
   border: 2px solid #ffffff;
-}
-
-.button {
   box-shadow: none;
   color: #ffffff;
   background: #999999;
 }
 
+#add-datetime {
+  width: 70%;
+}
+
+#copy-button {
+  width: 35%;
+}
+
+#arrangement-button {
+  width: 35%;
+}
+
 #select-format {
+  margin: 5px 0;
   padding: 0 10px;
-  width: 200px;
-  height: 36px;
+  width: 70%;
+  height: 40px;
   border: 2px solid #ccc;
   border-radius: 15px;
   /* background: transparent; */
@@ -68,12 +57,44 @@ input[type="date"] {
   font-size: 14px;
 }
 
-@media screen and (min-width: 560px) {
+textarea {
+  margin: 5px 0;
+  width: 70%;
+  height: 200px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 481px) {
   .schedule {
-    max-width: 100%;
+    width: 480px;
+    margin: 100px auto;
   }
+
   input {
-    width: 150px;
+    width: 60%;
+  }
+
+  textarea {
+    width: 60%;
+  }
+
+  #select-format {
+    width: 60%;
+  }
+
+  #add-datetime {
+    width: 60%;
+  }
+
+  #copy-button {
+    width: 30%;
+  }
+
+  #arrangement-button {
+    width: 30%;
   }
 }
 

@@ -155,7 +155,7 @@ const onClickArrangement = () => {
       endTime,
     ]);
   });
-  
+
   // Data型の配列をソートする
   arrangemented.sort(function (a, b) {
     return a[0] - b[0];
@@ -169,7 +169,6 @@ const onClickArrangement = () => {
   var hour = "";
   var min = "";
 
-
   // Date型にした配列の要素を選択されたテンプレートに従い、出力
   arrangemented.forEach(function (element, index) {
     year = element[0].getFullYear();
@@ -178,7 +177,11 @@ const onClickArrangement = () => {
     dayOfWeek = weeks[element[0].getDay()];
     hour = element[0].getHours();
     min = element[0].getMinutes();
-
+    
+    // minが0だと15:0のように出力されるので文字列の00を代入
+    if (min === 0) {
+      min = "00";
+    }
 
     if (selectFormatIndex === 0) {
       text =
@@ -264,8 +267,6 @@ const onClickArrangement = () => {
   });
 };
 
-
-
 //　フォーマットを選択した時の処理
 const onChangeSelectFormat = () => {
   const changeFormat = document.getElementById("schedule-content");
@@ -291,7 +292,7 @@ const onChangeSelectFormat = () => {
   var thisMonth = nowDate.getMonth() + 1;
 
   var newFormat = [];
-  
+
   // 配列の要素がどのフォーマットなのかわからないので、場合わけをして、指定の順序で日時などを新しい配列に挿入する
   changeFormatTarget.forEach(function (element) {
     dayOfWeek = element.substring(
@@ -312,7 +313,7 @@ const onChangeSelectFormat = () => {
       day = element.substring(element.indexOf("月") + 1, element.indexOf("日"));
     } else if (!element.includes("/")) {
       month = element.substring(0, element.indexOf("月"));
-      
+
       //　今月が12月で日程として1月が入力された場合来年の1月として扱う
       if (thisMonth === 12 && month === "1") {
         year = thisYear + 1;
@@ -354,7 +355,7 @@ const onChangeSelectFormat = () => {
   changeFormat.value = "";
   var weekAndTime = "";
   var text = "";
-  
+
   // 新しい配列の要素を選択されたフォーマット別に出力していく
   newFormat.forEach(function (element) {
     weekAndTime = " (" + element[3] + ") " + element[4] + "〜" + element[5];

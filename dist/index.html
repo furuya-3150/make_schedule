@@ -3,7 +3,8 @@
   <head>
     <title>日程表示</title>
     <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+
   <link rel="stylesheet" href="/src.a2b27638.css"></head>
 
   <body>
@@ -12,11 +13,11 @@
         <input type="date" id="vacant-date">
         <input type="time" id="start-time">
         <input type="time" id="end-time">
+        <br>
         <button class="button" id="add-datetime">出力</button>
       </div>
 
       <div>
-        <label>形式:</label>
         <select id="select-format">
           <option value="format1">1月1日 (日) 1:00〜23:00</option>
           <option value="format2">2023年1月1日 (日) 1:00〜23:00</option>
