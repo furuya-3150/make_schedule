@@ -319,6 +319,11 @@ var onClickArrangement = function onClickArrangement() {
     dayOfWeek = weeks[element[0].getDay()];
     hour = element[0].getHours();
     min = element[0].getMinutes();
+
+    // minが0だと15:0のように出力されるので文字列の00を代入
+    if (min === 0) {
+      min = "00";
+    }
     if (selectFormatIndex === 0) {
       text = month + "月" + day + "日" + " (" + dayOfWeek + ") " + hour + ":" + min + "〜" + element[1];
       if (index === 0) {
@@ -475,7 +480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41835" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35495" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
